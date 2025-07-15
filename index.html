@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Model Viewer Switcher</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { margin: 0; }
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+    }
+.toolbar {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* bisa diganti right: 20px kalau mau di kanan */
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .bg-switch {
+  background: white;
+  font-weight: bold;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button id="prevBtn">⟨ Prev</button>
+    <button id="nextBtn">Next ⟩</button>
+    <button class="bg-switch" data-bg="bg1.png">BG 1</button>
+    <button class="bg-switch" data-bg="bg2.png">BG 2</button>
+    <button class="bg-switch" data-bg="bg3.png">BG 3</button>
+    <button class="bg-switch" data-bg="bg4.png">BG 4</button>
+   
+
+  </div>
+
+  <model-viewer id="viewer" camera-controls></model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const models = [
+  '3d.glb',
+  '3d2.glb', '3d3.glb', '3d4.glb', '3d5.glb',
+  '3d6.glb', '3d7.glb', '3d8.glb', '3d9.glb', '3d10.glb',
+  '3d11.glb', '3d12.glb', '3d13.glb', '3d14.glb', '3d15.glb',
+  '3d16.glb', '3d17.glb', '3d18.glb', '3d19.glb', '3d20.glb',
+  '3d21.glb', '3d22.glb', '3d23.glb', '3d24.glb', '3d25.glb',
+  '3d26.glb', '3d27.glb', '3d28.glb', '3d29.glb', '3d30.glb',
+  '3d31.glb', '3d32.glb', '3d33.glb', '3d34.glb', '3d35.glb',
+  '3d36.glb', '3d37.glb', '3d38.glb', '3d39.glb', '3d40.glb',
+  '3d41.glb', '3d42.glb', '3d43.glb', '3d44.glb', '3d45.glb',
+  '3d46.glb', '3d47.glb', '3d48.glb', '3d49.glb', '3d50.glb',
+  '3d51.glb', '3d52.glb'
+];
+
+
+// Background switcher
+document.querySelectorAll('.bg-switch').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const bg = btn.dataset.bg;
+    viewer.style.backgroundImage = `url('assets3d/${bg}')`;
+  });
+});
+
+    let index = 0;
+
+    function loadModel(i) {
+      const path = `assets3d/${models[i]}`;
+      console.log("🔁 Loading model:", path);
+      viewer.src = path;
+    }
+
+    // Initial load
+    loadModel(index);
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      index = (index + 1) % models.length;
+      loadModel(index);
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      index = (index - 1 + models.length) % models.length;
+      loadModel(index);
+    });
+
+    viewer.addEventListener('load', () => {
+      console.log("✅ Loaded:", viewer.src);
+    });
+
+    viewer.addEventListener('error', (e) => {
+      console.error("❌ Failed to load:", viewer.src, e);
+    });
+  </script>
+
+</body>
+</html>
